@@ -1,0 +1,233 @@
+require("options")
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable",
+        lazypath,
+    })
+end
+vim.opt.rtp:prepend(lazypath)
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+require("lazy").setup("plugins")
+require("mappings")
+require("config.initialize")
+-- Define a Lua function to execute different commands based on the file type
+-- require("custom_functions")
+-- require("commands")
+-- require("nvim-window")
+
+-- -- plugin configs
+-- -- require("config.dashboard_nvim")
+require("config.lualine")
+require("config.nvim-treesitter")
+-- require("config.better-escape")
+require("config.telescope")
+require("config.cmp")
+-- require("config.harpoon")
+-- -- require("config.lspsaga")
+-- -- require("config.nvim-ts-context-commentstring")
+-- -- require("config.Comment")
+require("config.surround")
+-- -- require("config.hop")
+require("config.numb")
+-- require("config.fzf-lua")
+-- -- require("config.lir")
+-- -- require('config.nvim_transparent')
+-- -- require("config.github-theme")
+require("config.lsp-config")
+-- -- require("config.goto_preview")
+-- require("config.lspkind")
+-- require("config.nvim-autopairs")
+-- require("config.trouble")
+require("config.gitsigns")
+-- -- require("config.nordic")
+-- -- vim.cmd("source ~/.config/nvim/vim/black.vim")
+-- -- vim.cmd('source ~/.config/nvim/vim/isort.vim')
+-- -- require("config.null-ls")
+-- -- require("config.tabby")
+require("config.toggleterm")
+require("config.nvim-tree")
+require("config.stay-in-place")
+-- require("config.hlslens")
+-- require("config.winshift")
+-- -- require("config.noice")
+-- require("config.nvim-web-devicons")
+-- require("config.tabnine-nvim")
+-- require("config.various-textobjs")
+-- -- require("config.navigator")
+-- -- require("config.project")
+-- -- require("config.high-str")
+require("config.fidget")
+-- -- require("config.symbols-outline")
+-- -- require("leap").add_default_mappings()
+-- -- require("config.fzy2")
+-- -- require("config.leap")
+-- -- require("sentiment").enable()
+-- -- require("neoscroll").setup()
+-- -- require("lsp-lens").setup({})
+-- require("hlargs").setup()
+-- require("config.indent-blankline")
+require("config.smart-splits")
+-- -- require("registers").setup({})
+-- -- require("focus").setup()
+
+-- -- require("lazy.health").check()
+-- -- require("lspsaga.health").check()
+-- require("config.fzy")
+-- require("config.octo")
+
+vim.cmd("source ~/.config/nvim/vim/general.vim")
+vim.cmd("source ~/.config/nvim/vim/maps.vim")
+
+-- -- Plugins
+-- -- vim.cmd("source ~/.config/nvim/vim/theme/vim-hybrid.vim")
+-- -- vim.cmd("source ~/.config/nvim/vim/vim-airline.vim")
+
+-- vim.cmd("source ~/.config/nvim/vim/auto-commands.vim")
+vim.cmd("source ~/.config/nvim/vim/custom-functions.vim")
+vim.cmd("source ~/.config/nvim/vim/commands.vim")
+
+-- vim.cmd("source ~/.config/nvim/vim/nvim-hlslens.vim")
+-- vim.cmd("source ~/.config/nvim/vim/ack.vim")
+-- -- vim.cmd("source ~/.config/nvim/vim/tagbar.vim")
+
+vim.cmd("source ~/.config/nvim/vim/fzf.vim")
+vim.cmd("source ~/.config/nvim/vim/telescope.vim")
+
+vim.cmd("source ~/.config/nvim/vim/vim-maximizer.vim")
+-- -- vim.cmd("source ~/.config/nvim/vim/hop.vim")
+-- -- vim.cmd("source ~/.config/nvim/vim/lir.vim")
+-- vim.cmd("source ~/.config/nvim/vim/harpoon.vim")
+-- -- vim.cmd('source ~/.config/nvim/vim/nerdtree.vim')
+-- -- vim.cmd('source ~/.config/nvim/vim/nerdtree-git-plugin.vim')
+vim.cmd("source ~/.config/nvim/vim/undotree.vim")
+-- vim.cmd("source ~/.config/nvim/vim/lspsaga.vim")
+-- vim.cmd("source ~/.config/nvim/vim/trouble.vim")
+-- vim.cmd("source ~/.config/nvim/vim/limelight.vim")
+-- vim.cmd("source ~/.config/nvim/vim/lsp.vim")
+-- vim.cmd("source ~/.config/nvim/vim/markdown-preview.vim")
+-- vim.cmd("source ~/.config/nvim/vim/winshift.vim")
+-- vim.cmd("source ~/.config/nvim/vim/vimux.vim")
+vim.cmd("source ~/.config/nvim/vim/ale.vim")
+-- vim.cmd("source ~/.config/nvim/vim/rg.vim")
+-- -- vim.api.nvim_command("luafile ~/.config/nvim/lua/config/colorschemes.lua")
+-- require("config.colorschemes")
+-- vim.cmd("source ~/.config/nvim/vim/uncategorized.vim")
+-- require("nvim-ts-autotag").setup()
+--
+-- Executue python file
+vim.api.nvim_create_autocmd({"BufWritePre"}, {
+  pattern = {"*.py"},
+  callback = function(ev)
+      -- print(vim.inspect(ev))
+      -- if ev.match:find('leetcode', 1, true) then
+      if ev.match:find('data_structures', 1, true) then
+          print(ev.match)
+      -- for key,_ in pairs(ev) do
+      --    print(key)
+      --   end
+      -- vim.cmd([[silent !black %]])
+      -- vim.cmd([[silent !isort %]])
+          vim.cmd[[let g:ale_fix_on_save = 1]]
+          vim.cmd[[let g:black_linelength=119]]
+          -- vim.cmd([[silent 1TermExec direction=vertical size=50 cmd='py %']])
+      end
+      -- vim.cmd([[TermExec direction=horizontal size=10 cmd='py %']])
+      -- vim.cmd([[TermExec direction=float cmd='py %']])
+    -- vim.cmd([[silent w]]) -- Save the file after formatting
+  end
+})
+function RUN_FILE_COMMAND()
+    -- Get the file type of the current buffer
+    local file_type = vim.bo.filetype
+
+    -- Execute different commands based on the file type
+    if file_type == 'python' then
+        -- vim.api.nvim_command('!python3 %')
+        vim.cmd[[let g:ale_fix_on_save = 1]]
+        vim.cmd[[let g:black_linelength=119]]
+        vim.cmd([[silent TermExec direction=horizontal size=10 cmd='py %']])
+    elseif file_type == 'c' then
+        vim.api.nvim_command('!gcc % -o %<.out && ./%<.out')
+    else
+        -- Add additional file type conditions and commands here
+        -- For other file types, add appropriate commands
+        -- For example, you can execute the default 'make' command for Makefiles
+    end
+end
+
+
+-- require("colorbuddy").colorscheme('gruvbuddy')
+-- require("settings.theme")
+require("themery").setup({
+    themes = {{
+        name = "papercolor light",
+        colorscheme = "PaperColor",
+        before = [[
+        vim.opt.background = "light"
+        ]],
+    },
+    {
+        name = "gruvbuddy",
+        colorscheme = "gruvbuddy",
+        before = [[
+        vim.opt.background = "dark"
+        ]],
+    },
+    {
+        name = "default",
+        colorscheme = "default",
+    },
+    {
+        name = "papercolor dark",
+        colorscheme = "PaperColor",
+        before = [[
+        vim.opt.background = "dark"
+        ]],
+        after = [[-- Same as before, but after if you need it]]
+    }},
+    livePreview = true,
+})
+-- Define the mapping to execute the Lua function
+vim.api.nvim_set_keymap('n', ',r', ':lua RUN_FILE_COMMAND()<CR>', { noremap = true, silent = true })
+vim.cmd([[
+" Clears hlsearch after doing a search, otherwise just does normal <CR> stuff
+nnoremap <silent> <expr> <CR> {-> v:hlsearch ? "<cmd>nohl\<CR>" : "\<CR>"}()
+  " map <silent> ,w :lua require('nvim-window').pick()<CR>
+  nnoremap <silent> <leader>g :lua require('telescope-tabs').list_tabs()<CR>
+  nnoremap <silent> <A-j> :Gitsigns next_hunk<cr>
+  nnoremap <silent> <A-k> :Gitsigns prev_hunk<cr>
+  " map <C-d> 5j
+  " map <C-u> 5k
+  nnoremap H gT
+  nnoremap L gt
+  " colorscheme tokyodark
+  " colorscheme github_light
+set t_Co=256   " This is may or may not needed.
+let &termguicolors = 1
+  " let g:ale_fix_on_save = 1
+  " let g:black_linelength=119
+  nnoremap J 5j
+  nnoremap K 5k
+  nnoremap <leader>j J
+  vmap D y'>p
+augroup highlight_yank
+  autocmd!
+  autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 100})
+augroup END
+"remove trailing whitespace Before save
+" autocmd BufWritePre * :%s/\s\+$//e
+" let g:gitblame_enabled = 0
+" let g:gitblame_message_template = '                   <author> • <date> • <summary>'
+nnoremap <leader>en :tabnew /home/shahid/wiki_reference/quick_thought.md<CR>
+
+nnoremap <leader>sc /^class \w\+<cr>
+nnoremap <leader>sf /\s\s\s\sdef \w\+<cr>
+nnoremap <leader>sr /return \w\+<cr>
+]])
