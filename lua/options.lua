@@ -13,10 +13,9 @@
 local opt = vim.opt -- global/buffer/windows-scoped options
 -- local map = vim.api.nvim_set_keymap
 
-vim.cmd[[let g:python3_host_prog='/usr/bin/python3']]
+vim.cmd[[let g:python3_host_prog='/usr/lib/python3']]
 vim.opt.path = vim.opt.path + "**"
 
-vim.g.polyglot_disabled = { "autoindent" }
 vim.api.nvim_command("filetype off")
 vim.api.nvim_command("filetype plugin on")
 vim.api.nvim_command("filetype plugin indent on")

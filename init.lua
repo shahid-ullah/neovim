@@ -1,20 +1,20 @@
 require("options")
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-    vim.fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable",
-        lazypath,
-    })
+	vim.fn.system({
+		"git",
+		"clone",
+		"--filter=blob:none",
+		"https://github.com/folke/lazy.nvim.git",
+		"--branch=stable",
+		lazypath,
+	})
 end
 vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-require('lazy').setup('plugins')
+require("lazy").setup("plugins")
 require("mappings")
 require("config.initialize")
 require("config.telescope")
@@ -28,29 +28,41 @@ require("config.toggleterm")
 require("config.cmp")
 -- require("config.tabnine-nvim")
 
-local lsp_cmds = vim.api.nvim_create_augroup('lsp_cmds', { clear = true })
+local lsp_cmds = vim.api.nvim_create_augroup("lsp_cmds", { clear = true })
 
-vim.api.nvim_create_autocmd('LspAttach', {
-    group = lsp_cmds,
-    desc = 'LSP actions',
-    callback = function()
-        local bufmap = function(mode, lhs, rhs)
-            vim.keymap.set(mode, lhs, rhs, { buffer = true })
-        end
-
-        -- bufmap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
-        bufmap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
-        bufmap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
-        bufmap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
-        bufmap('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
-        bufmap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
-        bufmap('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>')
-        bufmap('n', '<leader><leader>f', '<cmd>lua vim.lsp.buf.format()<cr>')
-        bufmap('n', '[e', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
-        bufmap('n', ']e', '<cmd>lua vim.diagnostic.goto_next()<cr>')
-    end
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = lsp_cmds,
+	desc = "LSP actions",
+	callback = function()
+		local bufmap = function(mode, lhs, rhs)
+			vim.keymap.set(mode, lhs, rhs, { buffer = true })
+		end
+		bufmap("n", "[e", "<cmd>lua vim.diagnostic.goto_prev()<cr>")
+		bufmap("n", "]e", "<cmd>lua vim.diagnostic.goto_next()<cr>")
+		bufmap("n", "<leader><leader>f", "<cmd>lua vim.lsp.buf.format()<cr>")
+	end,
 })
 
+require("conform").setup({
+	formatters_by_ft = {
+		lua = { "stylua" },
+		-- Conform will run multiple formatters sequentially
+		python = { "ruff_organize_imports", "ruff_fix", "ruff_format" },
+		-- You can customize some of the format options for the filetype (:help conform.format)
+		rust = { "rustfmt", lsp_format = "fallback" },
+		-- Conform will run the first available formatter
+		javascript = { "prettierd", "prettier", stop_after_first = true },
+		markdown = { "prettier", stop_after_first = true },
+		["_"] = { "trim_whitespace" },
+	},
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+	pattern = "*",
+	callback = function(args)
+		require("conform").format({ bufnr = args.buf })
+	end,
+})
 
 vim.cmd("source ~/.config/nvim/vim/telescope.vim")
 vim.cmd("source ~/.config/nvim/vim/fzf.vim")
@@ -88,34 +100,26 @@ vim.cmd("source ~/.config/nvim/vim/maps.vim")
 -- vim.keymap.set('n', '>>', indent_wrap_mapping('>>'), { silent = true })
 
 -- Toggle fold at the current cursor position with <Tab>
-vim.keymap.set('n', '<Tab>', 'za', { silent = true, noremap = true })
--- vim.keymap.set('n', '<C-->', 'za', { silent = true, noremap = true })
+vim.keymap.set("n", "<Tab>", "za", { silent = true, noremap = true })
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 
-vim.cmd[[
+vim.cmd([[
     nnoremap H gT
     nnoremap L gt
     set t_Co=256   " This is may or may not needed.
     let &termguicolors = 1
-    " let g:ale_fix_on_save = 1
-    " let g:black_linelength=119
     nnoremap J 5j
     nnoremap K 5k
     nnoremap <leader>j J
     vmap D y'>p
-  " nnoremap <silent> <leader>g :lua require('telescope-tabs').list_tabs()<CR>
   nnoremap <silent> <leader>g :lua require('telescope-tabs').list_tabs({ initial_mode = "normal" })<CR>
   nnoremap <silent> <A-j> :Gitsigns next_hunk<cr>
   nnoremap <silent> <A-k> :Gitsigns prev_hunk<cr>
-  " colorscheme tokyodark
-  " colorscheme github_light
-  " colorscheme default
   colorscheme gruvbox-material
   silent! unmap <C-s>
-  " vim.g.netrw_browsex_viewer = 'nvim'
-]]
+]])
 
-vim.cmd[[
-    autocmd BufWritePre *.md Neoformat
-]]
+-- vim.cmd[[
+--     autocmd BufWritePre *.md Neoformat
+-- ]]

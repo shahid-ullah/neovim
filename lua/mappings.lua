@@ -34,5 +34,3 @@ keymap("n", "<tab>", "gt", { noremap = true })
 keymap("n", "<S-tab>", "gT", { noremap = true })
 -- keymap("n", "J", "5j", { noremap = true })
 -- keymap("n", "K", "5k", { noremap = true })
-local silent = { silent = true }
--- vim.keymap.set('n', '<leader>w', '<cmd>w!<cr>')
