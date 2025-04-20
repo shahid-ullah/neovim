@@ -64,6 +64,18 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	end,
 })
 
+require("lint").linters_by_ft = {
+	markdown = { "vale" },
+	python = { "ruff", "pylint" },
+}
+
+vim.api.nvim_create_autocmd({ "TextChanged" }, {
+	callback = function()
+		-- try_lint without arguments runs the linters defined in `linters_by_ft` for the current filetype
+		require("lint").try_lint()
+	end,
+})
+
 vim.cmd("source ~/.config/nvim/vim/telescope.vim")
 vim.cmd("source ~/.config/nvim/vim/fzf.vim")
 vim.cmd("source ~/.config/nvim/vim/vim-maximizer.vim")

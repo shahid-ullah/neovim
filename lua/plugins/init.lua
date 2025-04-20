@@ -222,4 +222,6 @@ return {
 			require("symbol-usage").setup()
 		end,
 	},
+	{ "mfussenegger/nvim-lint" },
+	{ "kevinhwang91/nvim-bqf" },
 }
