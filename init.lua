@@ -25,7 +25,7 @@ require("config.gitsigns")
 require("config.lualine")
 require("config.nvim-tree")
 require("config.toggleterm")
-require("config.cmp")
+-- require("config.cmp")
 -- require("config.tabnine-nvim")
 
 local lsp_cmds = vim.api.nvim_create_augroup("lsp_cmds", { clear = true })
@@ -40,6 +40,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		bufmap("n", "[e", "<cmd>lua vim.diagnostic.goto_prev()<cr>")
 		bufmap("n", "]e", "<cmd>lua vim.diagnostic.goto_next()<cr>")
 		bufmap("n", "<leader><leader>f", "<cmd>lua vim.lsp.buf.format()<cr>")
+		vim.keymap.set("n", "<leader>rn", ":IncRename ")
 	end,
 })
 
@@ -69,12 +70,12 @@ require("lint").linters_by_ft = {
 	python = { "ruff", "pylint" },
 }
 
-vim.api.nvim_create_autocmd({ "TextChanged" }, {
-	callback = function()
-		-- try_lint without arguments runs the linters defined in `linters_by_ft` for the current filetype
-		require("lint").try_lint()
-	end,
-})
+-- vim.api.nvim_create_autocmd({ "TextChanged" }, {
+-- 	callback = function()
+-- 		-- try_lint without arguments runs the linters defined in `linters_by_ft` for the current filetype
+-- 		require("lint").try_lint()
+-- 	end,
+-- })
 
 vim.cmd("source ~/.config/nvim/vim/telescope.vim")
 vim.cmd("source ~/.config/nvim/vim/fzf.vim")

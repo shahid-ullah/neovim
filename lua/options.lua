@@ -13,7 +13,7 @@
 local opt = vim.opt -- global/buffer/windows-scoped options
 -- local map = vim.api.nvim_set_keymap
 
-vim.cmd[[let g:python3_host_prog='/usr/lib/python3']]
+vim.cmd([[let g:python3_host_prog='/usr/lib/python3']])
 vim.opt.path = vim.opt.path + "**"
 
 vim.api.nvim_command("filetype off")
@@ -92,3 +92,4 @@ opt.completeopt = { "menuone", "noinsert", "noselect" } -- Completion options (f
 vim.opt.list = true
 -- vim.opt.listchars:append("space:⋅")
 vim.opt.listchars:append("eol:↴")
+vim.g.blamer_enabled = true

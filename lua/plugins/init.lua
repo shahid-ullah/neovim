@@ -15,6 +15,21 @@ return {
 	},
 	{ "junegunn/fzf", build = ":call fzf#install()" },
 	"junegunn/fzf.vim",
+	"ctrlpvim/ctrlp.vim",
+	{
+		"ibhagwan/fzf-lua",
+		-- optional for icon support
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		-- or if using mini.icons/mini.nvim
+		-- dependencies = { "echasnovski/mini.icons" },
+		opts = {},
+	},
+	{
+		"junegunn/fzf",
+		build = function()
+			vim.fn["fzf#install"]()
+		end,
+	},
 
 	"mrjones2014/smart-splits.nvim",
 	"tpope/vim-commentary",
@@ -22,8 +37,11 @@ return {
 	"ur4ltz/surround.nvim",
 	"wellle/targets.vim",
 	"tpope/vim-unimpaired",
+
 	"lewis6991/gitsigns.nvim",
 	"tpope/vim-fugitive",
+	"APZelos/blamer.nvim",
+
 	"szw/vim-maximizer",
 	"nvim-lualine/lualine.nvim",
 	"kyazdani42/nvim-tree.lua",
@@ -180,21 +198,6 @@ return {
 		opts = {},
 	},
 	{
-		"ibhagwan/fzf-lua",
-		-- optional for icon support
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-		-- or if using mini.icons/mini.nvim
-		-- dependencies = { "echasnovski/mini.icons" },
-		opts = {},
-	},
-	{
-		"junegunn/fzf",
-		build = function()
-			vim.fn["fzf#install"]()
-		end,
-	},
-
-	{
 		"linrongbin16/fzfx.nvim",
 		-- Optional to avoid break changes between major versions.
 		version = "v8.*",
@@ -203,7 +206,6 @@ return {
 			require("fzfx").setup()
 		end,
 	},
-	"ctrlpvim/ctrlp.vim",
 	{
 		"stevearc/conform.nvim",
 		opts = {},
@@ -224,4 +226,49 @@ return {
 	},
 	{ "mfussenegger/nvim-lint" },
 	{ "kevinhwang91/nvim-bqf" },
+	-- { "tris203/precognition.nvim" },
+	{ "yegappan/mru" },
+
+	-- Marks in gutter
+	{
+		"chentoast/marks.nvim",
+		event = "VeryLazy",
+		opts = {},
+	},
+	-- { "kshenoy/vim-signature" },
+	-- { "khorser/vim-mark-tools" },
+	-- { "zakj/vim-showmarks" },
+	{
+		"Dan7h3x/signup.nvim",
+		branch = "main",
+		opts = {
+			-- Your configuration options here
+		},
+		config = function(_, opts)
+			require("signup").setup(opts)
+		end,
+	},
+	{
+		"nvimdev/lspsaga.nvim",
+		config = function()
+			require("lspsaga").setup({})
+		end,
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter", -- optional
+			"nvim-tree/nvim-web-devicons", -- optional
+		},
+	},
+	{
+		"nvimdev/indentmini.nvim",
+		event = "BufEnter",
+		config = function()
+			require("indentmini").setup()
+		end,
+	},
+	{
+		"smjonas/inc-rename.nvim",
+		config = function()
+			require("inc_rename").setup()
+		end,
+	},
 }
